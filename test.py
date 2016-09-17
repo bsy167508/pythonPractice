@@ -1,6 +1,2 @@
-#!/bin/python
-
-l=raw_input().split(' ')
-if l[0]=="insert":
-	print "present"
-
+list=[1,1,2,2,3,4,5,6]
+print set(enumerate(list))
