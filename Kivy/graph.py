@@ -1,7 +1,8 @@
 from math import sin
 from kivy.garden.graph import Graph, MeshLinePlot
 from kivy.app import App
-
+#from kivy.core.window import Window
+#Window.clearcolor = (1, 1, 1, 1)
 
 graph = Graph(xlabel='X',
               ylabel='Y', 
