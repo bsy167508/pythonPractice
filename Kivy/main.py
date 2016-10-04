@@ -5,6 +5,8 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.image import Image
 #from kivy.core.window import Window
 from kivy.garden.graph import Graph, MeshLinePlot
+from kivy.properties import ObjectProperty
+
 #Window.clearcolor = (1, 1, 1, 1)
 
 Builder.load_string("""
@@ -251,7 +253,9 @@ Builder.load_string("""
             text: 'Student Info'
         TextInput:
             id: entryinput
-            text: 'Enter Entry No.'
+            text: 'Entry No.'
+            multiline: False
+            
         Button:
             text: 'Display Info'
             on_press: dadmin.call('info')
@@ -409,7 +413,16 @@ Builder.load_string("""
                     halign: 'left'
                     valign: 'top'
                     color: 0, 0, 0, 1
+                    
+<StudentGraph>:
+    id: studentgraph
+    BoxLayout:
+        MyGraph:
+                
 """)
+marksGlobal = [75, 74, 76]
+
+
 class Loginprompt(Screen):
     def __init__(self, **kwargs):
         super(Loginprompt, self).__init__(**kwargs)
@@ -514,13 +527,32 @@ class StudentGraph(Screen):
                         self.subjects=value.split(' ')
                         print self.subjects
                     if key=='Marks':
-                        self.marks=value.split(' ')
-    def build(self):
-        """plot.points = [(i+1, self.marks[i]) for i in [0, 1, 2]]
-        graph.add_plot(plot)"""
-        return Label(text='Hello world')  #graph
-    
+                        self.marks = value.split(' ')
 
+class MyGraph(Graph):
+    def __init__(self, **kwargs):
+        super(MyGraph, self).__init__(**kwargs)
+        self.xlabel = 'Subjects'
+        self.ylabel = 'Marks'
+        self.x_ticks_minor = 1
+        self.x_ticks_major = 1
+        self.y_ticks_major = 25
+        self.y_ticks_minor = 5
+        self.y_grid_label = True
+        self.x_grid_label = True
+        self.padding = 5
+        self.xlog = False
+        self.ylog = False
+        self.x_grid = True
+        self.y_grid = True
+        self.xmin = 0
+        self.xmax = 4
+        self.ymin = 0
+        self.ymax = 100
+        self.linePlot = MeshLinePlot(color=[1, 0, 0, 1])
+        self.linePlot.points = [(i+1, marksGlobal[i]) for i in [0, 1, 2]]
+        self.add_plot(self.linePlot)
+        
 sm = ScreenManager()
 sm.add_widget(Loginprompt(name='screen 1'))
 sm.add_widget(LoginScreen(name='screen 2'))
@@ -528,22 +560,6 @@ sm.add_widget(Dstudent(name='screen 3'))
 sm.add_widget(Dadmin(name='screen 4'))
 sm.add_widget(StudentInfo(name='screen 5'))
 sm.add_widget(StudentGraph(name='screen 6'))
-
-graph = Graph(xlabel='Subjects',
-              ylabel='Marks',
-              y_ticks_minor=5, 
-              y_ticks_major=25,
-              x_ticks_major=1,
-              y_grid_label=True, 
-              x_grid_label=True, 
-              padding=5,
-              x_grid=True, 
-              y_grid=True, 
-              ymin=0, 
-              ymax=100,
-              xmin=0,
-              xmax=4)
-plot = MeshLinePlot(color=[1, 1, 0, 0])
 
 class TestApp(App):
 
